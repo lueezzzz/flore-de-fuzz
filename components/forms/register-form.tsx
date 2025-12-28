@@ -7,8 +7,16 @@ import { RegisterFormType } from "@/types/form";
 import { RegisterFormSchema } from "@/schemas/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { createClient } from "@/supabase/client";
+import { useRouter } from "next/router";
+
+const supabase = createClient();
 
 export default function RegisterForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
@@ -18,8 +26,33 @@ export default function RegisterForm() {
     },
   });
 
-  function onSubmit(data: RegisterFormType) {
-    console.log(data);
+  async function onSubmit(formData: RegisterFormType) {
+    setIsLoading(true);
+    try {
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (authError) {
+        form.setError("email", { message: authError.message });
+        return;
+      } else {
+        const { error: dbError } = await supabase.from("user").insert([
+          {
+            auth_id: authData.user?.id,
+          },
+        ]);
+        router.push("/")
+        if (dbError) {
+          console.error("Error: ", dbError.message);
+          form.setError("root", { message: dbError.message });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -86,8 +119,8 @@ export default function RegisterForm() {
             )}
           />
           <Field>
-            <Button type="submit" form="register-form">
-              Submit
+            <Button type="submit" form="register-form" disabled={isLoading}>
+              {isLoading ? "Signing up..." : "Submit"}
             </Button>
           </Field>
         </FieldGroup>
