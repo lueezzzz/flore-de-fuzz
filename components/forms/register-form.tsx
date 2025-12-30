@@ -9,7 +9,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { createClient } from "@/supabase/client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/states/user";
 
 const supabase = createClient();
@@ -28,7 +28,7 @@ export default function RegisterForm() {
     },
   });
 
-  async function onSubmit(formData: RegisterFormType) {
+  async function handleRegister(formData: RegisterFormType) {
     setIsLoading(true);
     try {
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -53,7 +53,7 @@ export default function RegisterForm() {
             email: authData.user?.email || "",
             created_at: new Date(),
           });
-          router.push("/");
+          router.push("/home");
         }
       }
     } catch (err) {
@@ -65,7 +65,7 @@ export default function RegisterForm() {
 
   return (
     <>
-      <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
+      <form id="register-form" onSubmit={form.handleSubmit(handleRegister)}>
         <FieldGroup>
           <Controller
             name="email"
