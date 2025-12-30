@@ -10,12 +10,14 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { createClient } from "@/supabase/client";
 import { useRouter } from "next/router";
+import { useUserStore } from "@/states/user";
 
 const supabase = createClient();
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+  const { setUser } = useUserStore();
 
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(RegisterFormSchema),
@@ -33,7 +35,7 @@ export default function RegisterForm() {
         email: formData.email,
         password: formData.password,
       });
-      if (authError) {
+      if (authError && !authData.user) {
         form.setError("email", { message: authError.message });
         return;
       } else {
@@ -42,10 +44,16 @@ export default function RegisterForm() {
             auth_id: authData.user?.id,
           },
         ]);
-        router.push("/")
         if (dbError) {
           console.error("Error: ", dbError.message);
           form.setError("root", { message: dbError.message });
+        } else {
+          setUser({
+            auth_id: authData.user?.id || "",
+            email: authData.user?.email || "",
+            created_at: new Date(),
+          });
+          router.push("/");
         }
       }
     } catch (err) {
