@@ -11,6 +11,7 @@ import { useState } from "react";
 import { createClient } from "@/supabase/client";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/states/user";
+import Link from "next/link";
 
 const supabase = createClient();
 
@@ -96,6 +97,14 @@ export default function LoginForm() {
               </Field>
             )}
           />
+          <Field>
+            <div>
+              Don't have an account? Register{" "}
+              <Link href="register" className="text-blue-400">
+                here
+              </Link>
+            </div>
+          </Field>
           <Field>
             <Button type="submit" form="register-form" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}

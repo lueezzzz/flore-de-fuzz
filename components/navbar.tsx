@@ -22,7 +22,7 @@ export default function Navbar() {
             })}
           </nav>
           <div className="utility-sections flex-1 flex items-center justify-end">
-            <Link href="register">
+            <Link href="login">
               <UserIcon className="h-5 w-5" />
             </Link>
             <Link href="">
