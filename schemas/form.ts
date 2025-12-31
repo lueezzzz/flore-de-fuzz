@@ -15,3 +15,13 @@ export const LoginFormSchema = z.object({
   email: z.email("Invalid Email"),
   password: z.string().min(8, "Password too short"),
 });
+
+export const CheckoutFormSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.email(),
+  phoneNumber: z.string().min(11)
+
+
+  
+});
