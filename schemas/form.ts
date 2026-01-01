@@ -18,9 +18,9 @@ export const LoginFormSchema = z.object({
 });
 
 export const CheckoutFormSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  email: z.email(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.email("Email is required"),
   phoneNumber: z.string().min(11),
 
   address: z.string().min(5),

@@ -9,7 +9,7 @@ interface UserState {
   setIsUserLoading: (data: boolean) => void;
 }
 
-export const useUserStore = create<UserState>()(  
+export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       user: null,
