@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { listRegions } from "@jobuntux/psgc";
 
 export const RegisterFormSchema = z
   .object({
@@ -20,8 +21,12 @@ export const CheckoutFormSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.email(),
-  phoneNumber: z.string().min(11)
+  phoneNumber: z.string().min(11),
 
-
-  
+  address: z.string().min(5),
+  zipCode: z.string().max(4),
+  city: z.string().min(2),
+  region: z.enum(
+    listRegions().map((region) => region.regionName) as [string, ...string[]]
+  ),
 });

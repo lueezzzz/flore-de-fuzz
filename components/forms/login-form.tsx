@@ -56,7 +56,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <form id="register-form" onSubmit={form.handleSubmit(handleLogin)}>
+      <form id="login-form" onSubmit={form.handleSubmit(handleLogin)}>
         <FieldGroup>
           <Controller
             name="email"
@@ -106,7 +106,7 @@ export default function LoginForm() {
             </div>
           </Field>
           <Field>
-            <Button type="submit" form="register-form" disabled={isLoading}>
+            <Button type="submit" form="login-form" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </Field>

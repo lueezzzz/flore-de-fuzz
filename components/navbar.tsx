@@ -25,7 +25,7 @@ export default function Navbar() {
             <Link href="login">
               <UserIcon className="h-5 w-5" />
             </Link>
-            <Link href="">
+            <Link href="checkout">
               <ShoppingBagIcon className="h-5 w-5" />
             </Link>
           </div>
